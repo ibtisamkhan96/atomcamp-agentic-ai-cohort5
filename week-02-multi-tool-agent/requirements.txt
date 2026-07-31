@@ -1,0 +1,24 @@
+# Core agent framework
+langchain>=0.3,<0.4
+langchain-core>=0.3,<0.4
+langchain-community>=0.3,<0.4
+langchain-text-splitters>=0.3,<0.4
+
+# LLM providers (Groq is the free default; Anthropic optional)
+langchain-groq>=0.2
+langchain-anthropic>=0.3
+
+# RAG: embeddings and vector store
+langchain-huggingface>=0.1
+sentence-transformers>=3.0
+faiss-cpu>=1.8
+pypdf>=4.0
+
+# Tools
+mp-api>=0.44
+arxiv>=2.1
+duckduckgo-search>=6.0
+
+# UI and config
+gradio>=4.44
+python-dotenv>=1.0

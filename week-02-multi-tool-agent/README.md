@@ -1,0 +1,101 @@
+# Materials Research Assistant (Multi-Tool AI Agent)
+
+Week 2 assignment for atomcamp's Agentic AI course (Cohort 5): a practical,
+multi-tool AI agent built with LangChain, framed for my own field, materials
+informatics.
+
+## Project overview
+
+**Problem.** A materials engineer's questions span different sources: property
+databases, recent literature, quick unit calculations, and their own documents.
+Normally that means juggling several tools and tabs.
+
+**Solution.** A LangChain agent that reads the question, decides which tool or
+tools it needs, calls them, and combines the results into one answer.
+
+**Target users.** Materials scientists, informatics engineers, and students.
+
+**Why an agent.** The questions genuinely need different tools, and the agent
+selects and combines them dynamically. That is the point of a tool-using agent
+rather than a single prompt.
+
+## Architecture
+
+```
+Gradio UI (app.py)
+      |
+      v
+LangChain tool-calling agent (agent.py)   <-- LLM: Groq (default) or Anthropic
+      |
+      +-- materials_project_lookup   (external API 1: Materials Project)
+      +-- search_arxiv               (external API 2: arXiv)
+      +-- search_uploaded_documents  (RAG over an uploaded PDF)
+      +-- convert_units              (custom Python function)
+      +-- web_search                 (DuckDuckGo)
+```
+
+The agent chooses tools based on the question, feeds their outputs back into the
+LLM, and the LLM writes the final answer. Every tool fails soft: on an error it
+returns a message instead of crashing the loop.
+
+## Tools and APIs used
+
+| Tool | Type | What it does |
+|---|---|---|
+| `materials_project_lookup` | External API | Computed properties (band gap, density, formation energy, stability) by mp-id or formula |
+| `search_arxiv` | External API | Recent papers on materials, physics, machine learning |
+| `search_uploaded_documents` | RAG retrieval | Answers from a PDF the user uploads |
+| `convert_units` | Custom Python | Materials unit conversions (stress, density, temperature) |
+| `web_search` | Web | General or recent information (DuckDuckGo) |
+
+**RAG pipeline:** PDF loading (`PyPDFLoader`) then text splitting
+(`RecursiveCharacterTextSplitter`) then embeddings
+(`sentence-transformers/all-MiniLM-L6-v2`, free and local) then a FAISS vector
+store then relevant-passage retrieval, with the agent's LLM generating the
+answer from the retrieved passages.
+
+## Setup instructions
+
+```bash
+# 1. Install dependencies (a virtual environment is recommended)
+pip install -r requirements.txt
+
+# 2. Configure your keys
+cp .env.example .env        # then edit .env
+
+#    - LLM_PROVIDER=groq and a free GROQ_API_KEY from https://console.groq.com
+#      (or set LLM_PROVIDER=anthropic with an ANTHROPIC_API_KEY)
+#    - MP_API_KEY: a free key from https://materialsproject.org/api
+
+# 3. Run the app
+python app.py               # opens the Gradio interface in your browser
+```
+
+The first run downloads the small embedding model, so it needs an internet
+connection and takes a minute.
+
+## Example queries
+
+- What is the band gap of mp-149?
+- What is the density of SiO2 in the Materials Project?
+- Convert 210 GPa to psi
+- Convert 7.87 g/cm3 to kg/m3
+- Find recent arXiv papers on lithium solid state electrolytes
+- Upload a datasheet, then: what is the maximum service temperature in the document?
+
+## Limitations
+
+- Materials Project values are computed with DFT, so band gaps are underestimated
+  and should be treated as lower bounds.
+- The RAG store is in memory and holds one document at a time; uploading a new
+  PDF replaces the previous one, and it is not saved between runs.
+- DuckDuckGo search can rate-limit; the tool reports this rather than failing hard.
+- Tool selection quality depends on the chosen LLM.
+
+## About
+
+Built by Ibtisam Ahmed Khan, a materials engineer working in data and AI.
+
+- Materials Decoded: https://materialsdecoded.com
+- GitHub: https://github.com/ibtisamkhan96
+- LinkedIn: https://www.linkedin.com/in/ibtisam-ahmed-khan

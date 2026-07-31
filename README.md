@@ -12,6 +12,10 @@ materials data, properties, and the pipelines that tie them together.
   functions, loops, conditionals and dictionaries. Includes a menu-driven Grade
   Management System, then the same dictionary operations extended to a materials
   example (materials mapped to their Young's modulus).
+- [Week 2: Multi-tool AI agent](week-02-multi-tool-agent/) - a LangChain agent
+  (Materials Research Assistant) with five tools: Materials Project properties,
+  arXiv search, RAG over an uploaded PDF, a materials unit converter, and web
+  search, behind a Gradio interface.
 
 ## About
 
