@@ -24,12 +24,19 @@ except Exception as e:
 
 
 def index_document(file):
-    """Ingest an uploaded PDF into the RAG vector store."""
+    """Ingest an uploaded PDF into the RAG vector store.
+
+    Gradio may hand us the file as a path string or as an object with a .name,
+    so handle both.
+    """
     if file is None:
-        return "No file selected. Choose a PDF, then click Index document."
+        return "No file selected. Choose a PDF to index it."
+    path = file if isinstance(file, str) else getattr(file, "name", None)
+    if not path:
+        return "Could not read the uploaded file."
     try:
-        n_chunks = ingest_pdf(file.name)
-        return f"Indexed '{os.path.basename(file.name)}' into {n_chunks} chunks. You can now ask about it."
+        n_chunks = ingest_pdf(path)
+        return f"Indexed '{os.path.basename(path)}' into {n_chunks} chunks. You can now ask about it."
     except Exception as e:
         return f"Failed to index the document: {e}"
 
@@ -69,7 +76,7 @@ with gr.Blocks(title="Materials Research Assistant") as demo:
             answer = gr.Markdown(label="Answer")
             tools_note = gr.Markdown()
         with gr.Column(scale=1):
-            gr.Markdown("### Upload a document (optional)\nFor questions about your own PDF (a paper or datasheet).")
+            gr.Markdown("### Upload a document (optional)\nFor questions about your own PDF (a paper or datasheet). It indexes automatically on upload; wait for the 'Indexed ... chunks' message, then ask.")
             pdf = gr.File(file_types=[".pdf"], label="PDF")
             index_btn = gr.Button("Index document")
             index_status = gr.Markdown()
@@ -84,6 +91,8 @@ with gr.Blocks(title="Materials Research Assistant") as demo:
     ask_btn.click(ask, inputs=query, outputs=[answer, tools_note])
     query.submit(ask, inputs=query, outputs=[answer, tools_note])
     index_btn.click(index_document, inputs=pdf, outputs=index_status)
+    # Auto-index as soon as a PDF is uploaded, so the extra button click is optional.
+    pdf.upload(index_document, inputs=pdf, outputs=index_status)
 
 
 if __name__ == "__main__":
