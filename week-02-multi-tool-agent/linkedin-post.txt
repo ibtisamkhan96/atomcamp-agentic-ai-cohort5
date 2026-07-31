@@ -8,10 +8,11 @@ A lot for one week. But it only stuck because I built something with it.
 
 What I built
 
-A Materials Research Assistant. One agent, six tools, and it decides which to use for each question:
+A Materials Research Assistant. One agent, seven tools, and it decides which to use for each question:
 
 - search many materials databases at once (Materials Project, OQMD, COD, Alexandria) through the OPTIMADE standard
 - pull the deep properties of a specific material from the Materials Project
+- look up a chemical element's properties through a RapidAPI service
 - find recent papers on arXiv
 - answer questions about a PDF you upload, using RAG
 - convert materials units with a custom Python function
