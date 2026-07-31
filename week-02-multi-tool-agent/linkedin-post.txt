@@ -2,7 +2,7 @@ Week 2 of atomcamp's Agentic AI cohort is done. Here is what I learned, and what
 
 What I learned
 
-This week was about giving language models tools and memory. I went deep on RAG and how it differs from plain semantic search, embeddings and vector databases, loading data from PDFs, SQL, web pages and text files, HuggingFace models, Spaces and embeddings, LangChain and LangGraph and when to use each, API keys and providers like OpenAI, Groq and RapidAPI, Gradio, and the history of transformers and NLP that started all of this.
+This week was about giving language models tools and access to real data. I went deep on RAG and how it differs from plain semantic search, embeddings and vector databases, loading data from PDFs, SQL, web pages and text files, HuggingFace models, Spaces and embeddings, LangChain and LangGraph and when to use each, API keys and providers like OpenAI, Groq and RapidAPI, Gradio, and the history of transformers and NLP that started all of this.
 
 A lot for one week. But it only stuck because I built something with it.
 
