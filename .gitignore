@@ -1,3 +1,7 @@
 .ipynb_checkpoints/
 __pycache__/
 .env
+
+# Instructor course notebooks (kept local, not republished)
+RAG_Langchain_openAI.ipynb
+Semantic_Search_FAISS.ipynb
