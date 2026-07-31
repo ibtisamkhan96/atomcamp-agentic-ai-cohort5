@@ -1,8 +1,8 @@
-# Core agent framework
-langchain>=0.3,<0.4
-langchain-core>=0.3,<0.4
-langchain-community>=0.3,<0.4
-langchain-text-splitters>=0.3,<0.4
+# Core: LangChain v1 (create_agent + init_chat_model, built on LangGraph)
+langchain>=1.0,<2
+langgraph>=1.0
+langchain-community>=0.3
+langchain-text-splitters>=0.3
 
 # LLM providers (Groq is the free default; Anthropic optional)
 langchain-groq>=0.2

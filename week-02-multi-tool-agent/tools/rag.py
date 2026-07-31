@@ -11,7 +11,7 @@ Gradio app (which ingests the file) and the tool (which the agent calls) can
 reach it.
 """
 import os
-from langchain_core.tools import tool
+from langchain.tools import tool
 
 
 class _RagState:

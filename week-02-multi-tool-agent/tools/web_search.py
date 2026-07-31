@@ -4,7 +4,7 @@ For general or recent questions the other tools do not cover. No API key
 needed. DuckDuckGo can rate-limit, so this fails soft and reports the error
 rather than crashing the agent.
 """
-from langchain_core.tools import tool
+from langchain.tools import tool
 
 
 @tool

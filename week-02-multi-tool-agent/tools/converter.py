@@ -4,7 +4,7 @@ This is the assignment's required 'custom Python function' tool. It is pure
 Python with no external API. It also fits the wider theme of harmonising messy
 materials data, where mixed units are one of the most common problems.
 """
-from langchain_core.tools import tool
+from langchain.tools import tool
 
 # Base units: pressure/stress in pascals, density in kg/m3.
 _PRESSURE = {

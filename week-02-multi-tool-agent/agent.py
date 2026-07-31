@@ -1,13 +1,13 @@
-"""The LangChain multi-tool agent.
+"""The LangChain (v1) multi-tool agent.
 
-Registers the five tools, builds an LLM (Groq by default, Anthropic optional),
-and wires them into a tool-calling agent that decides which tool or tools each
-question needs, calls them, and combines the results.
+Built with the current LangChain 1.0 API: `create_agent` (which runs the core
+agent loop on top of LangGraph) and `init_chat_model` (the unified model
+initialiser). Registers the five tools and returns a ready-to-invoke agent.
 """
 import os
 from dotenv import load_dotenv
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain.agents import create_tool_calling_agent, AgentExecutor
+from langchain.agents import create_agent
+from langchain.chat_models import init_chat_model
 
 from tools.converter import convert_units
 from tools.materials_project import materials_project_lookup
@@ -17,7 +17,7 @@ from tools.rag import search_uploaded_documents
 
 load_dotenv()
 
-# The five tools: two external APIs, one RAG retrieval tool, one custom Python
+# Five tools: two external APIs, one RAG retrieval tool, one custom Python
 # function, and one general web search.
 TOOLS = [
     materials_project_lookup,   # external API 1
@@ -38,54 +38,52 @@ SYSTEM_PROMPT = (
 )
 
 
-def _build_llm():
-    """Build the chat model. LLM_PROVIDER selects groq (default, free) or anthropic."""
+def _model_id() -> str:
+    """Resolve the model string in the 'provider:model' form init_chat_model expects."""
     provider = os.getenv("LLM_PROVIDER", "groq").lower()
-    if provider == "anthropic":
-        from langchain_anthropic import ChatAnthropic
-        model = os.getenv("LLM_MODEL", "claude-3-5-sonnet-latest")
-        return ChatAnthropic(model=model, temperature=0)
-    from langchain_groq import ChatGroq
-    model = os.getenv("LLM_MODEL", "llama-3.3-70b-versatile")
-    return ChatGroq(model=model, temperature=0)
+    model = os.getenv("LLM_MODEL")
+    if model:
+        return model if ":" in model else f"{provider}:{model}"
+    return "groq:llama-3.3-70b-versatile" if provider == "groq" else "anthropic:claude-sonnet-4-6"
 
 
-def build_agent() -> AgentExecutor:
-    """Create the tool-calling agent executor."""
-    llm = _build_llm()
-    prompt = ChatPromptTemplate.from_messages([
-        ("system", SYSTEM_PROMPT),
-        ("human", "{input}"),
-        MessagesPlaceholder("agent_scratchpad"),
-    ])
-    agent = create_tool_calling_agent(llm, TOOLS, prompt)
-    return AgentExecutor(
-        agent=agent,
-        tools=TOOLS,
-        verbose=True,
-        return_intermediate_steps=True,
-        handle_parsing_errors=True,
-        max_iterations=6,
-    )
+def build_agent():
+    """Create the LangChain v1 agent (a compiled LangGraph)."""
+    model = init_chat_model(_model_id(), temperature=0)
+    return create_agent(model=model, tools=TOOLS, system_prompt=SYSTEM_PROMPT)
 
 
-def run_agent(executor: AgentExecutor, query: str):
-    """Run one query. Returns (answer, list_of_tool_names_used)."""
-    result = executor.invoke({"input": query})
-    steps = result.get("intermediate_steps", [])
-    tools_used = [step[0].tool for step in steps]
-    return result.get("output", ""), tools_used
+def run_agent(agent, query: str):
+    """Run one query. Returns (answer_text, list_of_tool_names_used)."""
+    result = agent.invoke({"messages": [{"role": "user", "content": query}]})
+    messages = result["messages"]
+
+    # Which tools ran: collect the names of every tool call the model made.
+    tools_used = []
+    for m in messages:
+        for tc in (getattr(m, "tool_calls", None) or []):
+            name = tc.get("name") if isinstance(tc, dict) else getattr(tc, "name", None)
+            if name:
+                tools_used.append(name)
+
+    # The final answer is the content of the last message.
+    answer = messages[-1].content if messages else ""
+    if isinstance(answer, list):  # some providers return a list of content blocks
+        answer = "".join(
+            part.get("text", "") if isinstance(part, dict) else str(part) for part in answer
+        )
+    return answer, tools_used
 
 
 if __name__ == "__main__":
     # Quick command-line smoke test (needs your .env keys set).
-    executor = build_agent()
+    agent = build_agent()
     for q in [
         "What is the band gap of mp-149?",
         "Convert 210 GPa to psi",
         "Find recent papers on solid state electrolytes",
     ]:
-        answer, used = run_agent(executor, q)
+        answer, used = run_agent(agent, q)
         print("\nQ:", q)
         print("Tools:", used)
         print("A:", answer)

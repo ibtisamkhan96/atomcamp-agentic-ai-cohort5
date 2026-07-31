@@ -21,11 +21,13 @@ rather than a single prompt.
 
 ## Architecture
 
+Built with **LangChain v1** (`create_agent` + `init_chat_model`), the current agent API.
+
 ```
 Gradio UI (app.py)
       |
       v
-LangChain tool-calling agent (agent.py)   <-- LLM: Groq (default) or Anthropic
+LangChain v1 agent, create_agent (agent.py)   <-- LLM: Groq (default) or Anthropic
       |
       +-- materials_project_lookup   (external API 1: Materials Project)
       +-- search_arxiv               (external API 2: arXiv)

@@ -7,7 +7,7 @@ missing or the call errors, so it never crashes the agent loop.
 """
 import os
 import re
-from langchain_core.tools import tool
+from langchain.tools import tool
 
 _FIELDS = [
     "material_id", "formula_pretty", "band_gap", "density",

@@ -4,7 +4,7 @@ Searches arXiv for recent scientific papers (materials science, physics,
 machine learning) and returns the top few with titles, authors, dates and
 short summaries. No API key needed. Fails soft.
 """
-from langchain_core.tools import tool
+from langchain.tools import tool
 
 
 @tool
