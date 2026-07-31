@@ -53,7 +53,7 @@ properties. Broad discovery first, deep dive second.
 |---|---|---|
 | `optimade_search` | External API | Broad search across many databases (Materials Project, OQMD, COD, Alexandria) via the OPTIMADE standard |
 | `materials_project_lookup` | External API | Deep computed properties (band gap, density, formation energy, stability) by mp-id or formula |
-| `element_lookup` | External API (RapidAPI) | Chemical element properties (atomic number, mass, symbol, category) from a periodic-table API on RapidAPI |
+| `element_lookup` | External API (RapidAPI) | Chemical element properties (atomic number, mass, symbol, category) via a periodic-table API on RapidAPI; falls back to a free periodic-table API when no RapidAPI key is set |
 | `search_arxiv` | External API | Recent papers on materials, physics, machine learning |
 | `search_uploaded_documents` | RAG retrieval | Answers from a PDF the user uploads |
 | `convert_units` | Custom Python | Materials unit conversions (stress, density, temperature) |
