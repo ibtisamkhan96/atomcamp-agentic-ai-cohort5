@@ -1,32 +1,32 @@
-Week 2 of atomcamp's Agentic AI cohort, and this one clicked.
+Week 2 of atomcamp's Agentic AI cohort is done. Here is what I learned, and what I built with it.
 
-The theme was giving language models tools and memory. By the end of the week I had a working multi-tool AI agent, and I framed it, as always, for my own field: a Materials Research Assistant.
+What I learned
 
-It runs on LangChain, and one agent decides which of six tools to use:
-- searches many materials databases at once (Materials Project, OQMD, COD, Alexandria) through the OPTIMADE standard
-- pulls deep properties of a specific material from the Materials Project
-- searches arXiv for recent papers
-- answers questions about a PDF you upload, using RAG
-- converts materials units with a custom Python function
-- falls back to a web search when nothing else fits
+This week was about giving language models tools and memory. I went deep on RAG and how it differs from plain semantic search, embeddings and vector databases, loading data from PDFs, SQL, web pages and text files, HuggingFace models, Spaces and embeddings, LangChain and LangGraph and when to use each, API keys and providers like OpenAI, Groq and RapidAPI, Gradio, and the history of transformers and NLP that started all of this.
 
-My favourite part: the first tool finds materials across every major database with one query, and when the agent needs the deep numbers on a specific hit, it passes that material straight to the Materials Project tool. Broad find, then deep dive.
+A lot for one week. But it only stuck because I built something with it.
 
-What I actually studied this week, and it was a lot:
-- semantic search, and how RAG is different from it
-- embeddings and vector databases
-- loading data into RAG from PDFs, SQL, web pages and text files
-- HuggingFace: models, Spaces and embeddings
-- LangChain and LangChain Community, tools and agents
-- the difference between LangChain and LangGraph
-- API keys and providers: OpenAI, Groq, RapidAPI
-- Gradio for the interface
-- transformers, their history, and NLP basics
+What I built
 
-The thing that stuck: an agent is only as good as its tools and its data. The clever part is not the model, it is choosing the right tool and feeding it clean, relevant context. That is a very materials-data way to think about it, and it is why I keep pointing these exercises at materials problems.
+A Materials Research Assistant. One agent, six tools, and it decides which to use for each question:
+
+- search many materials databases at once (Materials Project, OQMD, COD, Alexandria) through the OPTIMADE standard
+- pull the deep properties of a specific material from the Materials Project
+- find recent papers on arXiv
+- answer questions about a PDF you upload, using RAG
+- convert materials units with a custom Python function
+- fall back to a web search when nothing else fits
+
+The part I am proud of: the first tool finds materials across every major database with one query, and when the agent needs the deep numbers, it hands that material straight to the Materials Project tool. Broad find, then deep dive.
+
+The lesson of the week, in one line: an agent is only as good as its tools and its data. The model is not the clever part. Choosing the right tool and feeding it clean, relevant context is.
+
+That is a very materials-data way to see it, which is exactly why I keep pointing these exercises at materials problems.
 
 Code is on GitHub: https://github.com/ibtisamkhan96/atomcamp-agentic-ai-cohort5
 
-Thanks @atomcamp. If you are building agents, what is your default tool stack?
+Thanks @atomcamp. On to week 3.
+
+If you are building agents, what is in your default tool stack?
 
 #AgenticAI #RAG #LangChain #MaterialsInformatics #atomcamp
