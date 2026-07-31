@@ -1,0 +1,29 @@
+Week 2 of atomcamp's Agentic AI cohort, and this one clicked.
+
+The theme was giving language models tools and memory. By the end of the week I had a working multi-tool AI agent, and I framed it, as always, for my own field: a Materials Research Assistant.
+
+It runs on LangChain, and one agent decides which of five tools to use:
+- looks up material properties from the Materials Project
+- searches arXiv for recent papers
+- answers questions about a PDF you upload, using RAG
+- converts materials units with a custom Python function
+- falls back to a web search when nothing else fits
+
+What I actually studied this week, and it was a lot:
+- semantic search, and how RAG is different from it
+- embeddings and vector databases
+- loading data into RAG from PDFs, SQL, web pages and text files
+- HuggingFace: models, Spaces and embeddings
+- LangChain and LangChain Community, tools and agents
+- the difference between LangChain and LangGraph
+- API keys and providers: OpenAI, Groq, RapidAPI
+- Gradio for the interface
+- transformers, their history, and NLP basics
+
+The thing that stuck: an agent is only as good as its tools and its data. The clever part is not the model, it is choosing the right tool and feeding it clean, relevant context. That is a very materials-data way to think about it, and it is why I keep pointing these exercises at materials problems.
+
+Code is on GitHub: https://github.com/ibtisamkhan96/atomcamp-agentic-ai-cohort5
+
+Thanks @atomcamp. If you are building agents, what is your default tool stack?
+
+#AgenticAI #RAG #LangChain #MaterialsInformatics #atomcamp
