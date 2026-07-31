@@ -12,18 +12,20 @@ from langchain.chat_models import init_chat_model
 from tools.converter import convert_units
 from tools.materials_project import materials_project_lookup
 from tools.optimade_search import optimade_search
+from tools.rapidapi_element import element_lookup
 from tools.arxiv_search import search_arxiv
 from tools.web_search import web_search
 from tools.rag import search_uploaded_documents
 
 load_dotenv()
 
-# Six tools: three external APIs (Materials Project, OPTIMADE across many
-# databases, arXiv), one RAG retrieval tool, one custom Python function, and one
-# general web search.
+# Seven tools: four external APIs (OPTIMADE across many databases, Materials
+# Project, arXiv, and a periodic-table API via RapidAPI), one RAG retrieval tool,
+# one custom Python function, and one general web search.
 TOOLS = [
     optimade_search,            # external API: broad search across many databases
     materials_project_lookup,   # external API: deep properties from Materials Project
+    element_lookup,             # external API via RapidAPI: chemical element properties
     search_arxiv,               # external API: recent papers
     search_uploaded_documents,  # RAG document retrieval
     convert_units,              # custom Python function
@@ -34,9 +36,11 @@ SYSTEM_PROMPT = (
     "You are a materials research assistant for a materials informatics engineer. "
     "Your tools are: optimade_search (broad search for materials by element across many "
     "databases, Materials Project, OQMD, COD, Alexandria), materials_project_lookup (deep "
-    "computed properties of one material from the Materials Project), search_arxiv (recent "
-    "scientific papers), search_uploaded_documents (the PDF the user uploaded), convert_units "
-    "(materials unit conversions), and web_search (general or recent information). "
+    "computed properties of one material from the Materials Project), element_lookup (properties "
+    "of a single chemical element, atomic number, mass, symbol, via a periodic-table API), "
+    "search_arxiv (recent scientific papers), search_uploaded_documents (the PDF the user "
+    "uploaded), convert_units (materials unit conversions), and web_search (general or recent "
+    "information). "
     "Workflow: for broad 'which materials contain these elements' questions use optimade_search; "
     "if the user then wants detailed properties of a specific Materials Project result, take its "
     "mp- id and call materials_project_lookup. "

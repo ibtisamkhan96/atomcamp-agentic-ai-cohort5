@@ -31,6 +31,7 @@ LangChain v1 agent, create_agent (agent.py)   <-- LLM: Groq (default) or Anthrop
       |
       +-- optimade_search            (external API: broad search across many databases)
       +-- materials_project_lookup   (external API: deep Materials Project properties)
+      +-- element_lookup             (external API via RapidAPI: chemical element data)
       +-- search_arxiv               (external API: arXiv papers)
       +-- search_uploaded_documents  (RAG over an uploaded PDF)
       +-- convert_units              (custom Python function)
@@ -52,6 +53,7 @@ properties. Broad discovery first, deep dive second.
 |---|---|---|
 | `optimade_search` | External API | Broad search across many databases (Materials Project, OQMD, COD, Alexandria) via the OPTIMADE standard |
 | `materials_project_lookup` | External API | Deep computed properties (band gap, density, formation energy, stability) by mp-id or formula |
+| `element_lookup` | External API (RapidAPI) | Chemical element properties (atomic number, mass, symbol, category) from a periodic-table API on RapidAPI |
 | `search_arxiv` | External API | Recent papers on materials, physics, machine learning |
 | `search_uploaded_documents` | RAG retrieval | Answers from a PDF the user uploads |
 | `convert_units` | Custom Python | Materials unit conversions (stress, density, temperature) |
@@ -75,6 +77,7 @@ cp .env.example .env        # then edit .env
 #    - LLM_PROVIDER=groq and a free GROQ_API_KEY from https://console.groq.com
 #      (or set LLM_PROVIDER=anthropic with an ANTHROPIC_API_KEY)
 #    - MP_API_KEY: a free key from https://materialsproject.org/api
+#    - RAPIDAPI_KEY: a free key from https://rapidapi.com (subscribe to a periodic-table API)
 
 # 3. Run the app
 python app.py               # opens the Gradio interface in your browser
@@ -86,6 +89,7 @@ connection and takes a minute.
 ## Example queries
 
 - Which binary titanium oxides appear across the materials databases?
+- What is the atomic mass and symbol of iron?
 - What is the band gap of mp-149?
 - What is the density of SiO2 in the Materials Project?
 - Convert 210 GPa to psi
