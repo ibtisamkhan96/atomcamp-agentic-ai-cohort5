@@ -52,7 +52,9 @@ def _model_id() -> str:
     model = os.getenv("LLM_MODEL")
     if model:
         return model if ":" in model else f"{provider}:{model}"
-    return "groq:llama-3.3-70b-versatile" if provider == "groq" else "anthropic:claude-sonnet-4-6"
+    # gpt-oss-120b is used as the Groq default because it emits tool calls
+    # reliably; llama-3.3-70b sometimes garbles them (Groq returns tool_use_failed).
+    return "groq:openai/gpt-oss-120b" if provider == "groq" else "anthropic:claude-sonnet-4-6"
 
 
 def build_agent():
