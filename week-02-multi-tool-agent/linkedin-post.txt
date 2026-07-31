@@ -2,12 +2,15 @@ Week 2 of atomcamp's Agentic AI cohort, and this one clicked.
 
 The theme was giving language models tools and memory. By the end of the week I had a working multi-tool AI agent, and I framed it, as always, for my own field: a Materials Research Assistant.
 
-It runs on LangChain, and one agent decides which of five tools to use:
-- looks up material properties from the Materials Project
+It runs on LangChain, and one agent decides which of six tools to use:
+- searches many materials databases at once (Materials Project, OQMD, COD, Alexandria) through the OPTIMADE standard
+- pulls deep properties of a specific material from the Materials Project
 - searches arXiv for recent papers
 - answers questions about a PDF you upload, using RAG
 - converts materials units with a custom Python function
 - falls back to a web search when nothing else fits
+
+My favourite part: the first tool finds materials across every major database with one query, and when the agent needs the deep numbers on a specific hit, it passes that material straight to the Materials Project tool. Broad find, then deep dive.
 
 What I actually studied this week, and it was a lot:
 - semantic search, and how RAG is different from it
