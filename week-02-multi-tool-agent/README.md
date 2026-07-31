@@ -29,8 +29,9 @@ Gradio UI (app.py)
       v
 LangChain v1 agent, create_agent (agent.py)   <-- LLM: Groq (default) or Anthropic
       |
-      +-- materials_project_lookup   (external API 1: Materials Project)
-      +-- search_arxiv               (external API 2: arXiv)
+      +-- optimade_search            (external API: broad search across many databases)
+      +-- materials_project_lookup   (external API: deep Materials Project properties)
+      +-- search_arxiv               (external API: arXiv papers)
       +-- search_uploaded_documents  (RAG over an uploaded PDF)
       +-- convert_units              (custom Python function)
       +-- web_search                 (DuckDuckGo)
@@ -40,11 +41,17 @@ The agent chooses tools based on the question, feeds their outputs back into the
 LLM, and the LLM writes the final answer. Every tool fails soft: on an error it
 returns a message instead of crashing the loop.
 
+Two of the tools are designed to work together: `optimade_search` finds materials
+broadly across many databases and returns their ids, and for a Materials Project
+hit (an mp- id) the agent then calls `materials_project_lookup` for the deep
+properties. Broad discovery first, deep dive second.
+
 ## Tools and APIs used
 
 | Tool | Type | What it does |
 |---|---|---|
-| `materials_project_lookup` | External API | Computed properties (band gap, density, formation energy, stability) by mp-id or formula |
+| `optimade_search` | External API | Broad search across many databases (Materials Project, OQMD, COD, Alexandria) via the OPTIMADE standard |
+| `materials_project_lookup` | External API | Deep computed properties (band gap, density, formation energy, stability) by mp-id or formula |
 | `search_arxiv` | External API | Recent papers on materials, physics, machine learning |
 | `search_uploaded_documents` | RAG retrieval | Answers from a PDF the user uploads |
 | `convert_units` | Custom Python | Materials unit conversions (stress, density, temperature) |
@@ -78,6 +85,7 @@ connection and takes a minute.
 
 ## Example queries
 
+- Which binary titanium oxides appear across the materials databases?
 - What is the band gap of mp-149?
 - What is the density of SiO2 in the Materials Project?
 - Convert 210 GPa to psi

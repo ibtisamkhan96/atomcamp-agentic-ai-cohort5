@@ -18,6 +18,7 @@ pypdf>=4.0
 mp-api>=0.44
 arxiv>=2.1
 duckduckgo-search>=6.0
+requests>=2.31
 
 # UI and config
 gradio>=4.44
